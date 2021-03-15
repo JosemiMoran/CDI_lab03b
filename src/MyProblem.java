@@ -1,16 +1,18 @@
+import java.io.IOException;
+import java.nio.file.FileSystems;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 
 public class MyProblem {
     public static Matrix myMatrix;
+
     public static void main(String[] args) {
         System.out.println("Starting main");
         int numThreads = Integer.parseInt(args[0]);
         ArrayList<Thread> workerArrayList = new ArrayList<>(numThreads);
-        try {
-            myMatrix = new Matrix("image6.jpg", numThreads);
-        }catch (Exception e){
-            e.getMessage();
-        }
+        myMatrix = new Matrix(args[1], numThreads);
+
         for (int i = 0; i < numThreads; i++) {
             Thread thread = new Thread(new Worker(), "Thread " + i);
             System.out.println("Creating: " + thread.getName());
@@ -28,7 +30,11 @@ public class MyProblem {
                 e.printStackTrace();
             }
         }
-        myMatrix.writeImage();
+        try {
+            myMatrix.writeImage();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         System.out.println("The program has ended");
 
     }

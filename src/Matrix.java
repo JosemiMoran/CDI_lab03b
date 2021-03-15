@@ -2,15 +2,18 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.FileSystems;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 
 public class Matrix {
     public BufferedImage image;
     public BufferedImage imageOut;
+
     private int NUM_DIVISIONS;
-    public int height;
-    public int width;
-    ArrayList<Integer> coord = new ArrayList<Integer>();
+    private int height;
+    private int width;
 
     public Matrix(String file, int numThreads) {
         File fileIn = new File(file);
@@ -22,12 +25,13 @@ public class Matrix {
         height = image.getHeight();
         width = image.getWidth();
         NUM_DIVISIONS = numThreads;
+
         imageOut = new BufferedImage(width, height, image.getType());
 
     }
 
     public ArrayList<Integer> divideByRows(String name) {
-        coord.clear();
+        ArrayList<Integer> coord = new ArrayList<Integer>();
         int id = Integer.parseInt(name.split(" ")[1]);
         int rowSize = height / NUM_DIVISIONS;
         int startRow = id * rowSize;
@@ -36,7 +40,7 @@ public class Matrix {
         int endColumn = width;
 
         coord.add(startRow);
-        if (id==3) coord.add(height);
+        if (id == NUM_DIVISIONS - 1) coord.add(height);
         else coord.add(endRow);
         coord.add(startColumn);
         coord.add(endColumn);
@@ -44,7 +48,7 @@ public class Matrix {
     }
 
     public ArrayList<Integer> divideByColumns(String name) {
-        coord.clear();
+        ArrayList<Integer> coord = new ArrayList<Integer>();
         int id = Integer.parseInt(name.split(" ")[1]);
         int colSize = width / NUM_DIVISIONS;
         int startRow = 0;
@@ -59,7 +63,7 @@ public class Matrix {
     }
 
     public ArrayList<Integer> divideByBlocks(String name) {
-        coord.clear();
+        ArrayList<Integer> coord = new ArrayList<Integer>();
         int id = Integer.parseInt(name.split(" ")[1]);
         int blockWidthSize = width / NUM_DIVISIONS;
         int blockHeightSize = height / NUM_DIVISIONS;
@@ -75,8 +79,8 @@ public class Matrix {
         return coord;
     }
 
-    public void writeImage() {
-        File fileOut = new File("my_image.png");
+    public void writeImage() throws IOException {
+        File fileOut = new File("OutputImage.png");
         try {
             ImageIO.write(imageOut, "png", fileOut);
         } catch (IOException e) {
