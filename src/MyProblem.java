@@ -2,7 +2,6 @@ import java.util.ArrayList;
 
 public class MyProblem {
     public static Matrix myMatrix;
-    public static  Matrix finalMatrix;
     public static void main(String[] args) {
         System.out.println("Starting main");
         int numThreads = Integer.parseInt(args[0]);
@@ -12,7 +11,6 @@ public class MyProblem {
         }catch (Exception e){
             e.getMessage();
         }
-        finalMatrix = new Matrix(myMatrix.height , myMatrix.width , myMatrix.image.getType());
         for (int i = 0; i < numThreads; i++) {
             Thread thread = new Thread(new Worker(), "Thread " + i);
             System.out.println("Creating: " + thread.getName());
@@ -30,7 +28,7 @@ public class MyProblem {
                 e.printStackTrace();
             }
         }
-        finalMatrix.writeImage();
+        myMatrix.writeImage();
         System.out.println("The program has ended");
 
     }

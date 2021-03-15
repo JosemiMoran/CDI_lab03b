@@ -22,10 +22,8 @@ public class Matrix {
         height = image.getHeight();
         width = image.getWidth();
         NUM_DIVISIONS = numThreads;
-    }
+        imageOut = new BufferedImage(width, height, image.getType());
 
-    public Matrix(int heightOut, int widthOut, int typeOut) {
-        imageOut = new BufferedImage(widthOut, heightOut, typeOut);
     }
 
     public ArrayList<Integer> divideByRows(String name) {
@@ -38,7 +36,8 @@ public class Matrix {
         int endColumn = width;
 
         coord.add(startRow);
-        coord.add(endRow);
+        if (id==3) coord.add(height);
+        else coord.add(endRow);
         coord.add(startColumn);
         coord.add(endColumn);
         return coord;

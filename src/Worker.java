@@ -6,7 +6,6 @@ public class Worker implements Runnable {
     public Worker() {
     }
 
-
     @Override
     public void run() {
         try {
@@ -27,49 +26,60 @@ public class Worker implements Runnable {
         int endColumn = coordinates.get(3);
         int f = 10;
 
-        //System.out.println("Thread: " + Thread.currentThread().getName() + " Start Row: " + startRow + ", End Row: " + endRow + " Start Column: " + startColumn + ", End Column: " + endColumn);
         int fraction = (int) (1 / (Math.pow(2 * f + 1, 2)));
-        for (int i = startRow; i < endRow; i++) {
-            for (int j = startColumn; j < endColumn; j++) {
-//                System.out.println(Thread.currentThread().getName() + " i: " + i + " j: " + j + " StartRow: " + startRow + " EndRow: " + endRow + " StartColumn: " + startColumn + " EndColumn: " + endColumn);
+        int red, blue, green;
+
+        for (int j = startColumn; j < endColumn; j++) {
+            for (int i = startRow; i < endRow; i++) {
                 try {
-                    MyProblem.finalMatrix.imageOut.setRGB(i, j, MyProblem.myMatrix.image.getRGB(i,j));
+                    int summationRed = 0, summationBlue = 0, summationGreen = 0;
+                    for (int l = -f; l <= f; l++) {
+                        for (int k = -f; k <= f; k++) {
+
+                            x = i + k;
+                            y = j + l;
+
+                            if (x < 0) {
+                                x = -x;
+                            }
+                            if (x > MyProblem.myMatrix.height) {
+                                x = x - MyProblem.myMatrix.height;
+                            }
+
+                            if (y < 0) {
+                                y = -y;
+                            }
+                            if (y > MyProblem.myMatrix.width) {
+                                y = y - MyProblem.myMatrix.width;
+                            }
+
+                            try {
+                                System.out.println(MyProblem.myMatrix.image.getRGB(y, x)&0xF0F0F0F0);
+                                int pixel = MyProblem.myMatrix.image.getRGB(y, x)&0xF0F0F0F0; // getRGB(x,y)
+                                int alpha = pixel & 0xff000000;
+                                red = (pixel >> 16) & 0xff;
+                                green = (pixel >> 8) & 0xff;
+                                blue = (pixel) & 0xff;
+                                summationRed += red;
+                                summationBlue += blue;
+                                summationGreen += green;
+                            } catch (Exception e) {
+                                System.out.println(e.getMessage() + " GetRGB " + Thread.currentThread().getName() + ": x: " + x + " y: " + y + " StartRow: " + startRow + " EndRow: " + endRow + " StartColumn: " + startColumn + " EndColumn: " + endColumn);
+                            }
+                        }
+                    }
+                    if (summationBlue > 255) summationBlue = 255;
+                    if (summationGreen > 255) summationGreen = 255;
+                    if (summationRed > 255) summationRed = 255;
+                    int a = 0;
+                    int pixel = (a << 24) | (summationRed << 16) | (summationGreen << 8) | summationBlue;
+                    MyProblem.myMatrix.imageOut.setRGB(y, x, pixel &0xF0F0F0F0);
+                    // int RGB = (* fraction);
                 } catch (Exception e) {
-                    System.out.println(e.getMessage() + " " + Thread.currentThread().getName() + " i: " + i + " j: " + j + " StartRow: " + startRow + " EndRow: " + endRow + " StartColumn: " + startColumn + " EndColumn: " + endColumn);
+                    System.out.println(e.getMessage() + " SetRGB(): " + Thread.currentThread().getName() + " i: " + i + " j: " + j + " StartRow: " + startRow + " EndRow: " + endRow + " StartColumn: " + startColumn + " EndColumn: " + endColumn);
                 }
             }
         }
 
     }
 }
-//                int summation = 0;
-//                for (int k = -f; k <= f; k++) {
-//                    for (int l = -f; l <= f; l++) {
-//                        x = i + k;
-//                        y = j + l;
-//
-//                        if (x < 0) {
-//                            x = - x;
-//                        } else if (x < startRow) {
-//                            x = startRow + 1;
-//                        } else if (x > endRow) {
-//                            x = endRow - 1;
-//                        }
-//
-//                        if (y < 0) {
-//                            y = - y;
-//                        } else if (y < startColumn) {
-//                            y = startColumn + 1;
-//                        } else if (y > endColumn) {
-//                            y = endColumn - 1;
-//                        }
-//
-//                        try {
-//                            summation += MyProblem.myMatrix.image.getRGB(x, y);
-//                        } catch (Exception e) {
-//                            System.out.println(e.getMessage() + " " + Thread.currentThread().getName() + " x: " + x + " y: " + y + " StartRow: " + startRow + " EndRow: " + endRow + " StartColumn: " + startColumn + " EndColumn: " + endColumn);
-//                        }
-//
-//                    }
-//                }
-//                int RGB = (summation * fraction);
