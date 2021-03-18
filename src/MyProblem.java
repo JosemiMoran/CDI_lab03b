@@ -12,6 +12,8 @@ public class MyProblem {
         int numThreads = Integer.parseInt(args[0]);
         ArrayList<Thread> workerArrayList = new ArrayList<>(numThreads);
         myMatrix = new Matrix(args[1], numThreads);
+        System.out.println("Height: " + myMatrix.image.getHeight());
+        System.out.println("Width: " + myMatrix.image.getWidth());
         int operationSelected = Integer.parseInt(args[2]);
         for (int i = 0; i < numThreads; i++) {
             Thread thread = new Thread(new Worker(operationSelected), "Thread " + i);

@@ -19,7 +19,8 @@ public class Worker implements Runnable {
                 coordinates = MyProblem.myMatrix.divideByColumns(Thread.currentThread().getName());
             } else {
                 coordinates = MyProblem.myMatrix.divideByBlocks(Thread.currentThread().getName());
-
+                System.out.println(Thread.currentThread().getName() + " StartRow: " + coordinates.get(0) +
+                " EndRow: " + coordinates.get(1) + " StartColumn: " + coordinates.get(2) + " EndColumn: " + coordinates.get(3));
             }
             medianFilter(coordinates);
             System.out.println("Ending run: " + Thread.currentThread().getName());
@@ -53,14 +54,16 @@ public class Worker implements Runnable {
                         try {
                             summation += MyProblem.myMatrix.image.getRGB(y, x);
                         } catch (Exception e) {
-                            System.out.println("Column=" + i + " Row=" + j + " l= " + l + " k= " + k + " Column+l=" + y + " Row+k= " + x + " StartRow: " + startRow + " StartColumn: " + startColumn + " EndRow: " + endRow + " EndColumn: " + endColumn);
+                            System.exit(-1);
+                            //System.out.println("Column=" + i + " Row=" + j + " l= " + l + " k= " + k + " Column+l=" + y + " Row+k= " + x + " StartRow: " + startRow + " StartColumn: " + startColumn + " EndRow: " + endRow + " EndColumn: " + endColumn);
                         }
                     }
                 }
                 try {
                     MyProblem.myMatrix.imageOut.setRGB(i, j, (int) (Math.floor(summation / (double) den * 100) / 100));
                 } catch (Exception e) {
-                    System.out.println(e.getMessage() + " " + Thread.currentThread().getName() + " Column: " + i + " Row: " + j + " StartRow: " + startRow + " EndRow: " + endRow + " StartColumn: " + startColumn + " EndColumn: " + endColumn);
+                    System.exit(-1);
+                    //System.out.println(e.getMessage() + " " + Thread.currentThread().getName() + " Column: " + i + " Row: " + j + " StartRow: " + startRow + " EndRow: " + endRow + " StartColumn: " + startColumn + " EndColumn: " + endColumn);
                 }
             }
         }

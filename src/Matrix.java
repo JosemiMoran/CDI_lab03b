@@ -63,13 +63,28 @@ public class Matrix {
     public ArrayList<Integer> divideByBlocks(String name) {
         ArrayList<Integer> coord = new ArrayList<Integer>();
         int id = Integer.parseInt(name.split(" ")[1]);
-        int blockWidthSize = width / NUM_DIVISIONS;
-        int blockHeightSize = height / NUM_DIVISIONS;
-        int startRow = id * blockHeightSize;
-        int endRow = (id + 1) * blockHeightSize;
-        int startColumn = id * blockWidthSize;
-        int endColumn = (id + 1) * blockWidthSize;
+        int numCols = (int) Math.ceil(Math.sqrt(NUM_DIVISIONS));
+        int numRows = NUM_DIVISIONS / numCols;
+        int startRow = 0, endRow = 0, startColumn = 0, endColumn = 0;
+        int blockWidthSize = width / numCols;
+        int blockHeightSize = height / numRows;
+        int currentRow = 0;
+        int currentCol = 0;
 
+        for (int i = 0; i < NUM_DIVISIONS; i++) {
+            if (currentCol >= numCols){
+                currentCol =0;
+                currentRow++;
+            }
+            if (i == id) {
+                startRow = currentRow * blockHeightSize;
+                endRow = (currentRow + 1) * blockHeightSize;
+                startColumn = currentCol * blockWidthSize;
+                endColumn = (currentCol + 1) * blockWidthSize;
+            }
+
+            currentCol++;
+        }
 
 
         coord.add(startRow);
