@@ -2,15 +2,25 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class Worker implements Runnable {
+    int operation;
 
-    public Worker() {
+    public Worker(int operation) {
+        this.operation = operation;
     }
 
     @Override
     public void run() {
         try {
             System.out.println("Starting run: " + Thread.currentThread().getName());
-            ArrayList<Integer> coordinates = MyProblem.myMatrix.divideByRows(Thread.currentThread().getName());
+            ArrayList<Integer> coordinates;
+            if (operation == 1) {
+                coordinates = MyProblem.myMatrix.divideByRows(Thread.currentThread().getName());
+            } else if (operation == 2) {
+                coordinates = MyProblem.myMatrix.divideByColumns(Thread.currentThread().getName());
+            } else {
+                coordinates = MyProblem.myMatrix.divideByBlocks(Thread.currentThread().getName());
+
+            }
             medianFilter(coordinates);
             System.out.println("Ending run: " + Thread.currentThread().getName());
         } catch (Exception e) {

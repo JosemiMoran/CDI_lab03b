@@ -2,9 +2,6 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.FileSystems;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.ArrayList;
 
 public class Matrix {
@@ -58,7 +55,8 @@ public class Matrix {
         coord.add(startRow);
         coord.add(endRow);
         coord.add(startColumn);
-        coord.add(endColumn);
+        if (id == NUM_DIVISIONS - 1) coord.add(width);
+        else coord.add(endColumn);
         return coord;
     }
 
@@ -72,10 +70,14 @@ public class Matrix {
         int startColumn = id * blockWidthSize;
         int endColumn = (id + 1) * blockWidthSize;
 
+
+
         coord.add(startRow);
-        coord.add(endRow - 1);
+        if (id == NUM_DIVISIONS - 1) coord.add(height);
+        else coord.add(endRow);
         coord.add(startColumn);
-        coord.add(endColumn - 1);
+        if (id == NUM_DIVISIONS - 1) coord.add(width);
+        else coord.add(endColumn);
         return coord;
     }
 
